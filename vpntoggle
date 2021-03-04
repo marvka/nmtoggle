@@ -1,0 +1,27 @@
+#!/bin/bash
+CONN_NAME=$1
+
+if [ -z "$CONN_NAME" ]
+then
+	echo 'Usage: vpntoggle.sh CONNECTION'
+	exit 1
+fi
+
+IS_CONNECTION=`nmcli con | grep "$CONN_NAME"`
+
+if [ -z "$IS_CONNECTION" ] 
+then
+	echo 'Invalid connection'
+	exit 1
+fi
+
+IS_ACTIVE=`nmcli c show --active | grep "$CONN_NAME"`
+
+if [ -z "$IS_ACTIVE" ]
+then
+	nmcli con up id "$CONN_NAME"
+else
+	nmcli con down id "$CONN_NAME"
+fi
+
+exit 0
